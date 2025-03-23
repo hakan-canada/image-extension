@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #f5f5f5;
+    }
+    .success-icon {
+      color: #4CAF50;
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-top: 30px;
+    }
+    #status {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="success-icon">✓</div>
+    <h1>Payment Successful!</h1>
+    <p>Thank you for your purchase. Your premium access has been activated.</p>
+    <p>You can now close this window and continue using the extension with all premium features.</p>
+    <p id="status">Verifying payment...</p>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    
+    if (sessionId) {
+      fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('status').textContent = 'Payment verified! You can now close this page.';
+          
+          window.postMessage({ 
+            type: 'PAYMENT_SUCCESS', 
+            token: data.token,
+            customerId: data.customerId
+          }, '*');
+        } else {
+          document.getElementById('status').textContent = 'There was an issue verifying your payment. Please contact support.';
+        }
+      })
+      .catch(error => {
+        document.getElementById('status').textContent = 'Error verifying payment. Please contact support.';
+        console.error('Error:', error);
+      });
+    } else {
+      document.getElementById('status').textContent = 'No session ID found. Please contact support.';
+    }
+  </script>
+</body>
+</html>
