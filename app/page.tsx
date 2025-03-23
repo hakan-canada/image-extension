@@ -244,7 +244,7 @@ export default function Home() {
             <div className="text-center">
               <h3 className="text-2xl font-bold mb-2">One-Time Payment</h3>
               <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4">
-                $19.99
+                $9.99
               </div>
               <ul className="text-left space-y-4 mb-8">
                 <li className="flex items-center">
