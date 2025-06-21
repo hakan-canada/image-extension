@@ -20,7 +20,7 @@ export default function Home() {
 
   const handleInstall = () => {
     window.open(
-      "https://chrome.google.com/webstore/detail/your-extension-id",
+      "https://chromewebstore.google.com/detail/image-hover-download/ldhdhfcbhaedbghbpeholboandlihodo",
       "_blank"
     );
   };
